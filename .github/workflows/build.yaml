@@ -22,7 +22,7 @@ jobs:
         run: mv main.pdf ${{ github.repository_owner }}.pdf
 
       - name: Upload PDF artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pdf-output
           path: ${{ github.repository_owner }}.pdf
