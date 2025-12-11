@@ -1,0 +1,29 @@
+name: Build LaTeX PDF
+
+on:
+  push:
+      branches: [ main ]
+        workflow_dispatch:
+
+        jobs:
+          build_latex:
+              runs-on: ubuntu-latest
+
+                  steps:
+                        - uses: actions/checkout@v3
+
+                              - name: Install LaTeX
+                                      run: sudo apt-get update && sudo apt-get install -y texlive-full
+
+                                            - name: Compile LaTeX
+                                                    run: pdflatex main.tex
+
+                                                          - name: Rename PDF output with GitHub username
+                                                                  run: mv main.pdf ${{ github.repository_owner }}.pdf
+
+                                                                        - name: Upload PDF artifact
+                                                                                uses: actions/upload-artifact@v3
+                                                                                        with:
+                                                                                                  name: pdf-output
+                                                                                                            path: ${{ github.repository_owner }}.pdf
+                                                                                                            
