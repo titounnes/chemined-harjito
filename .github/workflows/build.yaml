@@ -9,6 +9,9 @@ jobs:
   build_latex:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write   # penting agar bisa git push
+
     steps:
       - uses: actions/checkout@v4
 
@@ -18,9 +21,18 @@ jobs:
           root_file: main.tex
 
       - name: Rename PDF
-        run: mv main.pdf ${{ github.repository_owner }}.pdf
+        run: mv main.pdf "${{ github.repository_owner }}.pdf"
 
-      - name: Upload PDF
+      - name: Commit PDF to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add "${{ github.repository_owner }}.pdf"
+          git commit -m "Update PDF on $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git push
+
+      - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
           name: pdf-output
